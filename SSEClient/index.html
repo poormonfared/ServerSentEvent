@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <title>Server Event Sent - Sample</title>
+        <style>
+            div#time {
+                width: 500px;
+                min-height: 100px;
+                color: #fff;
+                background-color: #000;
+                margin: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="time">
+            <a href="javascript:initialize();" style="text-decoration: none; color:#fff;font-weight: bolder;"><div style="width:100%">connect</div></a>
+        </div>
+
+        <script>
+            function initialize() {  
+                alert("called");  
+          
+                if (window.EventSource == undefined) {  
+                    // If not supported  
+                    document.getElementById('time').innerHTML = "Your browser doesn't support Server Sent Events.";  
+                    return;  
+                } else {  
+                    var source = new EventSource('https://localhost:7106/Chat/ServerTime');  
+          
+                    source.onopen = function (event) {  
+                        document.getElementById('time').innerHTML += 'Connection Opened.<br>';  
+                    };  
+          
+                    source.onerror = function (event) {  
+                        if (event.eventPhase == EventSource.CLOSED) {  
+                            document.getElementById('time').innerHTML += 'Connection Closed.<br>';  
+                        }  
+                    };  
+          
+                    source.onmessage = function (event) {  
+                        document.getElementById('time').innerHTML += event.data + '<br>';  
+                    };  
+                }  
+            }  
+        </script>
+    </body>
+</html>
